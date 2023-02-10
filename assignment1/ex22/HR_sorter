@@ -1,0 +1,190 @@
+#!/bin/bash
+
+# Put your code here
+# You may only use the following external programs: ls, echo, awk, cat, grep, sort, wc, bc
+
+#Variables___________________________________________________________________________________________________________________________
+# declare -a files 	#array for storing files in submissions/
+# declare -a count
+# declare -a total
+keyword=()
+value=()
+i=0
+
+#Put files in submissions/* into array_______________________________________________________________________________________________
+files=(submissions/*)
+
+#Put input.txt into two arrays_______________________________________________________________________________________________________
+
+while read line
+do
+    keyword[$i]=`echo $line | awk '{
+    if (NF==2) {
+        print $1;
+    }
+    else {
+        print ($1 " " $2);
+
+    }
+	}'`
+
+    i=$((i+1))
+
+    # keyword[$i]=`echo $line | awk '{print $1}'`
+    # value[$i]=`echo $line | awk '{print $2}'`
+    # i=$((i+1))
+    
+done < input.txt
+
+value=($(cat input.txt | awk '{print $NF}'))
+
+ls submissions/ | while read -r file
+do
+    total=0
+    for ((j=0; j<${#keyword[@]}; j++))
+    do
+        count=`grep -io "${keyword[$j]}" submissions/$file | wc -l`
+        score=`echo "scale=2; ${value[$j]}*$count" | bc`
+        total=`echo "scale=2; $score+$total" | bc`
+    done
+
+    total=`echo $total | awk '{printf "%g", $0}'`
+
+
+    echo $total $file
+done | sort -r -n -k1 | awk '{print $1 " " $2}'
+
+
+
+
+
+
+
+#times = grep -io "${#keyword[$1]}" submissions/David_Griffon | wc -l
+#echo $times
+
+# for ((i=0; i<${#files[@]}; i++));
+# do
+#     echo "${files[$i]}"
+#     for ((j=0; j<${#keyword[@]}; j++));
+#     do
+#         times=$(grep -o -i "{KEYWORDS[@]}"${files[$i]} | wc -l)
+#     done
+#     echo $times
+# done
+
+
+
+# for ((i=0; i<${#count[@]}; i++));
+# do
+#     total[$i]=`echo "scale=2; ${count[$i]}*${value[$i]}" | bc`
+# done
+
+#Sort and Print______________________________________________________________________________________________________________________
+
+
+# for ((i=0; i<${#files[@]}; i++));
+# do
+#     echo "${files[$i]}"
+#     for ((j=0; j<${#keyword[@]}; j++));
+#     do
+#         echo "${keyword[$j]} ${total[$i]}"
+#     done
+# done
+
+
+
+
+
+#use echo and wc to count the number of lines in each file and store it in an array
+# keyword=`echo wc -w input.txt`
+
+# keyword="The store is 12 miles away." ; echo "${STRING//[!0-9]/}"
+# keyword=($(cat input.txt | wc -w))
+
+# print out the arrays
+# for i in "${keyword[@]}"
+# do
+# echo "$i"
+# done
+
+# for i in "${value[@]}"
+# do
+# echo "$i"
+# done
+
+
+#Search for and calculate scores_____________________________________________________________________________________________________ 
+# for ((i=0; i<${#files[@]}; i++));
+# do
+# 	echo "${files[$i]}"
+#     while read line
+#     do
+#         for ((j=0; j<${#keyword[@]}; j++));
+#         do
+#             if "grep -q -o -i "\"${keyword[$j]}\"" "$line"" $0 " | wc -l"; then
+            
+#                 count[$i]=`echo "scale=2; ${count[$i]}+${value[$j]}" | bc`
+#             fi
+
+#         done
+#     done < "${files[$i]}"
+# done
+
+
+
+# while read line
+# do
+#     if [[ $line == *" "* ]]; then
+#         keyword[$i]=${line% *}
+#         # take only the last word
+#         value[$i]=${line##* } 
+#         ((i++))
+#     fi
+#     # keyword[$i]=`echo $line | awk '{print $1}'`
+#     # value[$i]=`echo $line | awk '{print $2}'`
+#     # i=$((i+1))
+# done < input.txt
+
+# keyword=(`cat input.txt | awk '{
+#     if (match($0,/[0-9]/)) {
+#         keyword = substr($0,0,match($0,/[0-9]/)-1);
+#         print keyword;}
+#         }'`)
+
+# value=($(cat input.txt | awk '{print $NF}'))
+
+# keyword=($(cat input.txt | awk '{
+#     if (NF==2) {
+#         print $1;
+#     }
+#     else {
+#         print $1" "$2;
+
+#     }
+# 	}'))
+
+
+
+
+# keyword=()
+# value=()
+# i=0
+# while read line
+# do
+#     if [[ $line == *" "* || $line == *"     "* ]]; then
+#         keyword[$i]=${line% *}
+#         # take only the last word
+#         value[$i]=${line##* } 
+#         ((i++))
+#     fi
+#     # keyword[$i]=`echo $line | awk '{print $1}'`
+#     # value[$i]=`echo $line | awk '{print $2}'`
+#     # i=$((i+1))
+# done < input.txt
+
+# for i in "${keyword[@]}"
+# do
+# echo "$i"
+# done
+
